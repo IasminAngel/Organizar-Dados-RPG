@@ -15,67 +15,71 @@ class OrdemIniciativaApp:
         self.indice_atual = 0
         self.efeitos = {}
 
+        # Frame principal com scroll
+        self.main_frame = ctk.CTkScrollableFrame(root, width=750, height=750)
+        self.main_frame.pack(fill="both", expand=True)
+
         # Entrada de Nome
-        self.label_nome = ctk.CTkLabel(root, text="Nome do Jogador:", font=("Arial", 14, "bold"))
+        self.label_nome = ctk.CTkLabel(self.main_frame, text="Nome do Jogador:", font=("Arial", 14, "bold"))
         self.label_nome.pack(pady=5)
-        self.nome_entry = ctk.CTkEntry(root, width=250)
+        self.nome_entry = ctk.CTkEntry(self.main_frame, width=250)
         self.nome_entry.pack(pady=5)
 
         # Entrada do Número do Dado
-        self.label_numero = ctk.CTkLabel(root, text="Número do Dado:", font=("Arial", 14, "bold"))
+        self.label_numero = ctk.CTkLabel(self.main_frame, text="Número do Dado:", font=("Arial", 14, "bold"))
         self.label_numero.pack(pady=5)
-        self.numero_entry = ctk.CTkEntry(root, width=250)
+        self.numero_entry = ctk.CTkEntry(self.main_frame, width=250)
         self.numero_entry.pack(pady=5)
 
         # Botões
-        self.btn_adicionar = ctk.CTkButton(root, text="Adicionar", command=self.adicionar, width=200, fg_color="green")
+        self.btn_adicionar = ctk.CTkButton(self.main_frame, text="Adicionar", command=self.adicionar, width=200, fg_color="green")
         self.btn_adicionar.pack(pady=5)
 
-        self.btn_proximo = ctk.CTkButton(root, text="Próximo Jogador", command=self.proximo_jogador, width=200, fg_color="orange")
+        self.btn_proximo = ctk.CTkButton(self.main_frame, text="Próximo Jogador", command=self.proximo_jogador, width=200, fg_color="orange")
         self.btn_proximo.pack(pady=5)
         
-        self.btn_remover = ctk.CTkButton(root, text="Remover Selecionado", command=self.remover_selecionado, width=200, fg_color="red")
+        self.btn_remover = ctk.CTkButton(self.main_frame, text="Remover Selecionado", command=self.remover_selecionado, width=200, fg_color="red")
         self.btn_remover.pack(pady=5)
 
-        self.btn_apagar = ctk.CTkButton(root, text="Apagar Lista", command=self.apagar_lista, width=200, fg_color="blue")
+        self.btn_apagar = ctk.CTkButton(self.main_frame, text="Apagar Lista", command=self.apagar_lista, width=200, fg_color="blue")
         self.btn_apagar.pack(pady=5)
 
         # Lista de Jogadores
-        self.lista_label = ctk.CTkLabel(root, text="Lista de Iniciativa:", font=("Arial", 14, "bold"))
+        self.lista_label = ctk.CTkLabel(self.main_frame, text="Lista de Iniciativa:", font=("Arial", 14, "bold"))
         self.lista_label.pack(pady=5)
 
-        self.lista_box = ctk.CTkTextbox(root, width=350, height=150, state="disabled", font=("Arial", 12))
+        self.lista_box = ctk.CTkTextbox(self.main_frame, width=350, height=150, state="disabled", font=("Arial", 12))
         self.lista_box.pack(pady=5)
 
         # Exibição da Rodada Atual
-        self.label_rodada = ctk.CTkLabel(root, text="Rodada: 1", font=("Arial", 14, "bold"), text_color="yellow")
+        self.label_rodada = ctk.CTkLabel(self.main_frame, text="Rodada: 1", font=("Arial", 14, "bold"), text_color="yellow")
         self.label_rodada.pack(pady=10)
 
         # Seção de efeitos
-        self.label_efeito = ctk.CTkLabel(root, text="Adicionar Efeito:", font=("Arial", 14, "bold"))
+        self.label_efeito = ctk.CTkLabel(self.main_frame, text="Adicionar Efeito:", font=("Arial", 14, "bold"))
         self.label_efeito.pack(pady=5)
 
-        self.efeito_nome_entry = ctk.CTkEntry(root, width=200, placeholder_text="Nome do Efeito")
+        self.efeito_nome_entry = ctk.CTkEntry(self.main_frame, width=200, placeholder_text="Nome do Efeito")
         self.efeito_nome_entry.pack(pady=5)
 
-        self.efeito_duracao_entry = ctk.CTkEntry(root, width=100, placeholder_text="Duração (rodadas)")
+        self.efeito_duracao_entry = ctk.CTkEntry(self.main_frame, width=100, placeholder_text="Duração (rodadas)")
         self.efeito_duracao_entry.pack(pady=5)
 
-        self.efeito_jogador_entry = ctk.CTkEntry(root, width=200, placeholder_text="Jogador(es) afetado(s)")
+        self.efeito_jogador_entry = ctk.CTkEntry(self.main_frame, width=200, placeholder_text="Jogador(es) afetado(s)")
         self.efeito_jogador_entry.pack(pady=5)
 
-        self.btn_adicionar_efeito = ctk.CTkButton(root, text="Aplicar Efeito", command=self.aplicar_efeito, width=200, fg_color="purple")
+        self.btn_adicionar_efeito = ctk.CTkButton(self.main_frame, text="Aplicar Efeito", command=self.aplicar_efeito, width=200, fg_color="purple")
         self.btn_adicionar_efeito.pack(pady=5)
 
         # Botão para remover efeito selecionado
-        self.btn_remover_efeito = ctk.CTkButton(root, text="Remover Efeito Selecionado", command=self.remover_efeito_selecionado, width=200, fg_color="gray")
+        self.btn_remover_efeito = ctk.CTkButton(self.main_frame, text="Remover Efeito Selecionado", command=self.remover_efeito_selecionado, width=200, fg_color="gray")
         self.btn_remover_efeito.pack(pady=5)
 
         # Lista de Efeitos
-        self.efeitos_label = ctk.CTkLabel(root, text="Efeitos Ativos:", font=("Arial", 14, "bold"))
+        self.efeitos_label = ctk.CTkLabel(self.main_frame, text="Efeitos Ativos:", font=("Arial", 14, "bold"))
         self.efeitos_label.pack(pady=5)
 
-        self.efeitos_box = ctk.CTkTextbox(root, width=350, height=100, state="normal", font=("Arial", 12))
+        self.efeitos_box = ctk.CTkTextbox(self.main_frame, width=350, height=100, state="normal", font=("Arial", 12))
         self.efeitos_box.pack(pady=5)
 
     def adicionar(self):
