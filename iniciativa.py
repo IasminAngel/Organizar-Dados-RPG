@@ -5,27 +5,32 @@ class OrdemIniciativaApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Ordem de Iniciativa")
-        
+        self.root.geometry("350x400")  # Define o tamanho da janela
+        self.centralizar_janela()
+
         self.jogadores = []
 
-        tk.Label(root, text="Nome do Jogador:").grid(row=0, column=0, padx=5, pady=5)
-        self.nome_entry = tk.Entry(root)
-        self.nome_entry.grid(row=0, column=1, padx=5, pady=5)
+        # Entrada de nome
+        tk.Label(root, text="Nome do Jogador:", font=("Arial", 10, "bold")).pack(pady=5)
+        self.nome_entry = tk.Entry(root, font=("Arial", 10))
+        self.nome_entry.pack(pady=5)
 
-        tk.Label(root, text="Número do Dado:").grid(row=1, column=0, padx=5, pady=5)
-        self.numero_entry = tk.Entry(root)
-        self.numero_entry.grid(row=1, column=1, padx=5, pady=5)
+        # Entrada do número
+        tk.Label(root, text="Número do Dado:", font=("Arial", 10, "bold")).pack(pady=5)
+        self.numero_entry = tk.Entry(root, font=("Arial", 10))
+        self.numero_entry.pack(pady=5)
 
-        tk.Button(root, text="Adicionar", command=self.adicionar).grid(row=2, column=0, columnspan=2, pady=5)
-        tk.Button(root, text="Apagar Lista", command=self.apagar_lista).grid(row=3, column=0, columnspan=2, pady=5)
+        # Botões
+        tk.Button(root, text="Adicionar", command=self.adicionar, width=15, bg="green", fg="white").pack(pady=5)
+        tk.Button(root, text="Remover Selecionado", command=self.remover_selecionado, width=20, bg="red", fg="white").pack(pady=5)
+        tk.Button(root, text="Apagar Lista", command=self.apagar_lista, width=15, bg="gray", fg="white").pack(pady=5)
 
-        
-        self.lista_frame = tk.Frame(root)
-        self.lista_frame.grid(row=4, column=0, columnspan=2, pady=5)
-        self.lista_label = tk.Label(self.lista_frame, text="Lista de Iniciativa:")
-        self.lista_label.pack()
-        self.lista_box = tk.Text(self.lista_frame, width=30, height=10, state="disabled")
-        self.lista_box.pack()
+        # Lista de jogadores (usando Listbox)
+        self.lista_label = tk.Label(root, text="Lista de Iniciativa:", font=("Arial", 10, "bold"))
+        self.lista_label.pack(pady=5)
+
+        self.lista_box = tk.Listbox(root, width=40, height=10, font=("Arial", 10))
+        self.lista_box.pack(pady=5)
 
     def adicionar(self):
         nome = self.nome_entry.get().strip()
@@ -42,18 +47,29 @@ class OrdemIniciativaApp:
         self.numero_entry.delete(0, tk.END)
 
     def atualizar_lista(self):
-        self.lista_box.config(state="normal")
-        self.lista_box.delete(1.0, tk.END)
-
+        self.lista_box.delete(0, tk.END)
         for i, (numero, nome) in enumerate(self.jogadores, start=1):
-            self.lista_box.insert(tk.END, f"{i}. {numero} - {nome}\n")
+            self.lista_box.insert(tk.END, f"{i}. {numero} - {nome}")
 
-        self.lista_box.config(state="disabled")
+    def remover_selecionado(self):
+        try:
+            index = self.lista_box.curselection()[0]
+            del self.jogadores[index]
+            self.atualizar_lista()
+        except IndexError:
+            messagebox.showwarning("Aviso", "Selecione um jogador para remover.")
 
     def apagar_lista(self):
         self.jogadores.clear()
         self.atualizar_lista()
 
+    def centralizar_janela(self):
+        self.root.update_idletasks()
+        largura = self.root.winfo_width()
+        altura = self.root.winfo_height()
+        x = (self.root.winfo_screenwidth() // 2) - (largura // 2)
+        y = (self.root.winfo_screenheight() // 2) - (altura // 2)
+        self.root.geometry(f"+{x}+{y}")
 
 if __name__ == "__main__":
     root = tk.Tk()
