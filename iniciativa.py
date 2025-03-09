@@ -5,7 +5,7 @@ class OrdemIniciativaApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Ordem de Iniciativa")
-        self.root.geometry("800x900")
+        self.root.geometry("500x900")
         ctk.set_appearance_mode("dark")  
         ctk.set_default_color_theme("blue")
 
