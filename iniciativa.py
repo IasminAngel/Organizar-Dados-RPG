@@ -5,7 +5,7 @@ class OrdemIniciativaApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Ordem de Iniciativa")
-        self.root.geometry("500x900")
+        self.root.geometry("800x800")
         ctk.set_appearance_mode("dark")  
         ctk.set_default_color_theme("blue")
 
@@ -67,11 +67,15 @@ class OrdemIniciativaApp:
         self.btn_adicionar_efeito = ctk.CTkButton(root, text="Aplicar Efeito", command=self.aplicar_efeito, width=200, fg_color="purple")
         self.btn_adicionar_efeito.pack(pady=5)
 
+        # Botão para remover efeito selecionado
+        self.btn_remover_efeito = ctk.CTkButton(root, text="Remover Efeito Selecionado", command=self.remover_efeito_selecionado, width=200, fg_color="gray")
+        self.btn_remover_efeito.pack(pady=5)
+
         # Lista de Efeitos
         self.efeitos_label = ctk.CTkLabel(root, text="Efeitos Ativos:", font=("Arial", 14, "bold"))
         self.efeitos_label.pack(pady=5)
 
-        self.efeitos_box = ctk.CTkTextbox(root, width=350, height=100, state="disabled", font=("Arial", 12))
+        self.efeitos_box = ctk.CTkTextbox(root, width=350, height=100, state="normal", font=("Arial", 12))
         self.efeitos_box.pack(pady=5)
 
     def adicionar(self):
@@ -151,15 +155,31 @@ class OrdemIniciativaApp:
         
     def remover_selecionado(self):
         try:
-            index = self.lista_box.index("insert").split(".")[0]  # Obtém a linha selecionada
-            if index.isdigit():
-                index = int(index) - 1
-                if 0 <= index < len(self.jogadores):
-                    del self.jogadores[index]
-                    self.atualizar_lista()
+            index = int(self.lista_box.index("insert").split(".")[0]) - 1
+            if 0 <= index < len(self.jogadores):
+                jogador_removido = self.jogadores[index][1]
+                del self.jogadores[index]
+                if jogador_removido in self.efeitos:
+                    del self.efeitos[jogador_removido]
+                self.atualizar_lista()
+                self.atualizar_efeitos()
         except:
             messagebox.showwarning("Aviso", "Selecione um jogador para remover.")
-        
+
+    def remover_efeito_selecionado(self):
+        try:
+            selecao = self.efeitos_box.get("sel.first", "sel.last")
+            if selecao:
+                jogador_efeito = selecao.split(":")[0].strip()
+                efeito_selecionado = selecao.split(":")[1].split("(")[0].strip()
+                if jogador_efeito in self.efeitos:
+                    self.efeitos[jogador_efeito] = [efeito for efeito in self.efeitos[jogador_efeito] if efeito[0] != efeito_selecionado]
+                    if not self.efeitos[jogador_efeito]:
+                        del self.efeitos[jogador_efeito]
+                self.atualizar_efeitos()
+        except:
+            messagebox.showwarning("Aviso", "Selecione um efeito para remover.")
+   
     def apagar_lista(self):
         self.jogadores.clear()
         self.efeitos.clear()
